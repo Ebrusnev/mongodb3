@@ -302,15 +302,11 @@ MongoClient.connect(url, function(err, db) {
 		});
 	*/
 
-/*	function makeEdited(arr){
-		for(var i=0; i<=arr.length; i++){
-			if (arr[i]%2==0) {
-				db.collection('products').updateOne({position: arr[i]}, )
-			}
-		}
-	}*/
 
-	db.collection('products')
+
+//------------------------------------через простой перебор(не работает)----------------------------\\
+
+/*	db.collection('products')
 	.find()
 	.sort({position: 1})
 	.project({position: true})
@@ -323,25 +319,59 @@ MongoClient.connect(url, function(err, db) {
 						console.log('Added');
 						db.close();
 					}
-
 				});
 			}
-			 //console.log('err');
 		}
-	});
+	});*/
 
 //});
-/*
-	db.collection('products')
+
+
+//------------------------------------через перебор по position(не работает)----------------------------\\
+
+
+
+/*	db.collection('products')
 	.find()
 	.sort({position: 1})
 	.project({position: true})
 	.toArray(function(err, docs){
 			if(docs.position%2==0){
-				db.collection('products').updateOne({}, {$set:{edited: ""}});
+				//db.collection('products').updateOne({}, {$set:{edited: ""}});
+				console.log(docs);
+				db.close()
 			}
-			else console.log(docs);
-		db.close();
+			else {
+				console.log('err');
+				db.close();
+			}
 	});*/
 
+
+
+
+//        #19 рабочий вариант)))
+//---------------------------------!!!!!!!!!!через for-in работает!!!!!!!!------------------------\\
+
+
+
+	db.collection('products')
+		.find()
+		.sort({position: 1})
+		.project({position: true})
+		.toArray(function(err, docs){
+			for(var key in docs){
+				if (docs[key].position%2==0) {
+					db.collection('products').update({position: docs[key].position}, {$set:{edited: ""}}, function(err){
+						if(err){
+							console.log("Error");
+						}
+						else{
+							db.close();
+							console.log("added");
+						}
+					});
+				}
+			}
+		});
 });
