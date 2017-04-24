@@ -184,11 +184,164 @@ MongoClient.connect(url, function(err, db) {
 		});*/
 
 
-		db.collection("products")
+
+/*			db.collection('products')
+			.find()
+			.limit(1)
+			.sort({'position': -1})
+			.project({position: true})
+			.toArray(function(err, docs){
+			if (err) {
+				return console.log('Error', err);
+			}
+			//console.log(docs)
+			db.collection("products").insertMany([{
+			    available: false,
+			    position: ++docs[0].position,
+			    name: 'New Something'+ docs[0].position,
+			    short: 'np',
+			    description: 'new product',
+			    price: 1024,
+			    discount: 1,
+			    category: 'new',
+			    date: '2014-06-14T10:04:30 +05:00',
+			    tags: [ 'ccc', 'dddd', 'exit' ]
+			},{
+			    available: true,
+			    position: ++docs[0].position,
+			    name: 'New Something'+ docs[0].position,
+			    short: 'np',
+			    description: 'new product',
+			    price: 1024,
+			    discount: 1,
+			    category: 'new',
+			    date: '2014-06-14T10:04:30 +05:00',
+			    tags: [ 'ccc', 'dddd', 'exit' ]
+			},{
+			    available: false,
+			    position: ++docs[0].position,
+			    name: 'New Something'+ docs[0].position,
+			    short: 'np',
+			    description: 'new product',
+			    price: 1024,
+			    discount: 1,
+			    category: 'new',
+			    date: '2014-06-14T10:04:30 +05:00',
+			    tags: [ 'ccc', 'dddd', 'exit' ]
+			},{
+			    available: true,
+			    position: ++docs[0].position,
+			    name: 'New Something'+ docs[0].position,
+			    short: 'np',
+			    description: 'new product',
+			    price: 1024,
+			    discount: 1,
+			    category: 'new',
+			    date: '2014-06-14T10:04:30 +05:00',
+			    tags: [ 'ccc', 'dddd', 'exit' ]
+			},{
+			    available: false,
+			    position: ++docs[0].position,
+			    name: 'New Something'+ docs[0].position,
+			    short: 'np',
+			    description: 'new product',
+			    price: 1024,
+			    discount: 1,
+			    category: 'new',
+			    date: '2014-06-14T10:04:30 +05:00',
+			    tags: [ 'ccc', 'dddd', 'exit' ]
+			}], function(err){
+				db.close();
+				});
+		});*/
+
+
+
+			//double search - useless
+
+/*		db.collection('products').
 		.find()
-		.limit(1)
+		.sort({position: 1})
 		.project({position: true})
 		.toArray(function(err, docs){
-			
+			if (err) {
+				console.log('Error', err)
+			}
+			db.collection('products')
+			.find()
+			.sort({price: 1})
+			.project({price: true})
+			.toArray(function(err, price){
+				db.collection('products')
+				.updateMany({
+
+				});
+			});
 		});
+*/
+
+		
+								//#18*--------\/------------#18*
+
+
+	/*		db.collection('products').updateMany({}, {$inc: {price: 1}}, function(err){
+			if (err) {
+				console.log('Error', err);
+			}
+			db.collection('products')
+			.find()
+			.sort({position: -1})
+			.limit(5)
+			.toArray(function(err, docs){
+				if (err) {
+					return console.log("Error", err);
+				}
+				console.log(docs);
+				db.close();
+			});
+		});
+	*/
+
+/*	function makeEdited(arr){
+		for(var i=0; i<=arr.length; i++){
+			if (arr[i]%2==0) {
+				db.collection('products').updateOne({position: arr[i]}, )
+			}
+		}
+	}*/
+
+	db.collection('products')
+	.find()
+	.sort({position: 1})
+	.project({position: true})
+	.toArray(function(err, docs){
+		for(var i=0; i<=docs.length; i++){
+			if(docs[i]%2==0){
+				db.collection('products').updateOne({}, {$set:{edited: ""}}, function(err){
+					if (err) {console.log('Error', err)}
+					else {
+						console.log('Added');
+						db.close();
+					}
+
+				});
+			}
+			 //console.log('err');
+		}
+	});
+
+//});
+/*
+	db.collection('products')
+	.find()
+	.sort({position: 1})
+	.project({position: true})
+	.toArray(function(err, docs){
+			if(docs.position%2==0){
+				db.collection('products').updateOne({}, {$set:{edited: ""}});
+			}
+			else console.log(docs);
+		db.close();
+	});*/
+
 });
